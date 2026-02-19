@@ -2,10 +2,10 @@
 <xmile version="1.0" xmlns="http://docs.oasis-open.org/xmile/ns/XMILE/v1.0" xmlns:isee="http://iseesystems.com/XMILE">
 	<header>
 		<smile version="1.0" namespace="std, isee"/>
-		<name>hw1_starter_v3</name>
+		<name>hw1_Kai_Lin</name>
 		<uuid>4a6e158f-c160-4293-aba8-8d50fb2af75f</uuid>
 		<vendor>isee systems, inc.</vendor>
-		<product version="4.1.1" isee:build_number="3772" isee:saved_by_v1="true" lang="en">Stella Professional</product>
+		<product version="4.1.2" isee:build_number="3810" isee:saved_by_v1="true" lang="en">Stella Professional</product>
 	</header>
 	<ai_information>
 		<status verified="false"/>
@@ -15,7 +15,14 @@
 		<stop>60</stop>
 		<dt reciprocal="true">4</dt>
 	</sim_specs>
-	<isee:prefs saved_runs="5" keep="false" show_module_prefix="true" live_update_on_drag="true" show_restore_buttons="false" layer="model" isee:design="" isee:design_custom="false" interface_scale_ui="true" interface_max_page_width="10000" interface_max_page_height="10000" interface_min_page_width="0" interface_min_page_height="0" rifp="true"/>
+	<isee:prefs saved_runs="5" keep="false" show_module_prefix="true" live_update_on_drag="true" show_restore_buttons="false" layer="model" isee:design="" isee:design_custom="false" interface_scale_ui="true" interface_max_page_width="10000" interface_max_page_height="10000" interface_min_page_width="0" interface_min_page_height="0" rifp="true">
+		<isee:tag_styles>
+			<isee:tag_style tag="Interface"/>
+			<isee:tag_style tag="Output"/>
+			<isee:tag_style tag="Parameter"/>
+			<isee:tag_style tag="Policy"/>
+		</isee:tag_styles>
+	</isee:prefs>
 	<isee:multiplayer_settings include_chat="true" allow_observers="false" advance_time_increment="1" max_advance_time_in_ms="0" model_stops_when_players_drop="false" observer_start_page="home_page" enabled="false"/>
 	<isee:time_formats default_format="Builtin">
 		<isee:time_format name="Builtin" type="adaptive"/>
@@ -68,7 +75,7 @@
 				<units>Pg C squared</units>
 			</stock>
 			<flow name="GPP">
-				<eqn>GPP_base * (Atmosphere/(Km_CO2+Atmosphere)) / (Atm_ref/(Km_CO2+Atm_ref))</eqn>
+				<eqn>GPP_base * ((Atmosphere/(Km_CO2+Atmosphere)) / (Atm_ref/(Km_CO2+Atm_ref))) * Available_N / (Kn + Available_N)</eqn>
 				<non_negative/>
 				<units>Pg C/yr</units>
 			</flow>
@@ -88,7 +95,11 @@
 				<units>Pg C/yr</units>
 			</flow>
 			<flow name="Emissions">
-				<eqn>IF Scenario = 1 THEN emissions_base ELSE IF Scenario = 2 THEN emissions_base ELSE emissions_base</eqn>
+				<eqn>IF Scenario = 1 THEN 
+emissions_base
+ELSE IF Scenario = 2 THEN 
+emissions_base * MAX(0, 1 - TIME/30)
+ELSE emissions_base * (1.02 ^ TIME)</eqn>
 				<non_negative/>
 				<units>Pg C/yr</units>
 			</flow>
@@ -98,7 +109,7 @@
 				<units>Pg C squared/yr</units>
 			</flow>
 			<aux name="GPP base">
-				<eqn>120</eqn>
+				<eqn>142.1</eqn>
 				<units>Pg C/yr</units>
 			</aux>
 			<aux name="Atm ref">
@@ -149,6 +160,13 @@
 					<ypts>800,848,892,932,968,1001,1031,1059,1085,1109,1132,1153,1173</ypts>
 				</gf>
 			</aux>
+			<aux name="Available N">
+				<eqn>50</eqn>
+				<units>Pg N</units>
+			</aux>
+			<aux name="Kn">
+				<eqn>10</eqn>
+			</aux>
 		</variables>
 		<views>
 			<style color="black" background="white" font_style="normal" font_weight="normal" text_decoration="none" text_align="center" vertical_text_align="center" font_color="black" font_family="Arial" font_size="10pt" padding="2" border_color="black" border_width="thin" border_style="none">
@@ -198,7 +216,7 @@
 				<isee:iframe color="black" background="white" text_align="left" vertical_text_align="top" font_size="12pt" border_width="thin" border_style="solid"/>
 				<isee:financial_table color="black" background="white" text_align="right" font_size="12pt" hide_border="false" auto_fit="true" first_column_width="250" other_column_width="100" header_font_style="normal" header_font_weight="bold" header_text_decoration="none" header_text_align="center" header_vertical_text_align="center" header_font_color="black" header_font_family="Arial" header_font_size="14pt" header_text_padding="2" header_text_border_color="black" header_text_border_width="thin" header_text_border_style="none"/>
 			</style>
-			<view isee:show_pages="false" background="white" page_width="768" page_height="596" isee:page_cols="2" isee:page_rows="2" isee:scroll_x="23" isee:popup_graphs_are_comparative="true" isee:enable_non_negative_highlights="false" type="stock_flow">
+			<view isee:show_pages="false" background="white" page_width="770" page_height="590" isee:page_cols="2" isee:page_rows="2" isee:scroll_x="5" isee:popup_graphs_are_comparative="true" isee:enable_non_negative_highlights="false" type="stock_flow">
 				<style color="black" background="white" font_style="normal" font_weight="normal" text_decoration="none" text_align="center" vertical_text_align="center" font_color="black" font_family="Arial" font_size="10pt" padding="2" border_color="black" border_width="thin" border_style="none">
 					<stock color="blue" background="white" font_color="blue" font_size="9pt" label_side="top">
 						<shape type="rectangle" width="45" height="35"/>
@@ -281,7 +299,7 @@
 						<pt x="206.934" y="378.043"/>
 					</pts>
 				</flow>
-				<aux x="544.672" y="425.703" name="GPP base"/>
+				<aux x="549.465" y="429.947" name="GPP base"/>
 				<aux x="616.102" y="433.465" name="Atm ref"/>
 				<aux x="684.403" y="433.465" name="Km CO2"/>
 				<aux x="684.403" y="287.477" name="resp fraction"/>
@@ -356,7 +374,7 @@
 					<from>SOM</from>
 					<to>Total_Carbon</to>
 				</connector>
-				<connector uid="2" angle="21.208">
+				<connector uid="2" angle="25.5736">
 					<from>GPP_base</from>
 					<to>GPP</to>
 				</connector>
@@ -369,8 +387,54 @@
 					<from>Observed_CO2</from>
 					<to>Squared_Error</to>
 				</connector>
+				<stacked_container uid="21" x="266.102" y="719.199">
+					<table width="350" height="250">
+						<item type="time"/>
+						<item>
+							<entity name="RMSE"/>
+						</item>
+					</table>
+				</stacked_container>
+				<stacked_container uid="22" x="389.434" y="719.199">
+					<table interval="1" report_balances="beginning" report_flows="instantaneous" width="350" height="250">
+						<item type="time"/>
+						<item>
+							<format precision="1" scale_by="1"/>
+							<entity name="Atmosphere"/>
+						</item>
+					</table>
+				</stacked_container>
+				<aux x="557.606" y="373.051" name="Available N"/>
+				<aux x="684.403" y="373.051" name="Kn"/>
+				<connector uid="23" angle="339.165">
+					<from>Available_N</from>
+					<to>GPP</to>
+				</connector>
+				<connector uid="24" angle="197.232">
+					<from>Kn</from>
+					<to>GPP</to>
+				</connector>
+				<stacked_container uid="25" x="549.465" y="719.199">
+					<table width="350" height="250">
+						<item type="time"/>
+						<item>
+							<entity name="Emissions"/>
+						</item>
+					</table>
+				</stacked_container>
+				<stacked_container uid="26" x="710.922" y="719.199">
+					<table width="350" height="250">
+						<item type="time"/>
+						<item>
+							<entity name="Total_Carbon"/>
+						</item>
+					</table>
+				</stacked_container>
 			</view>
 		</views>
 	</model>
+	<isee:controls>
+		<isee:control priority="interactive" name="GPP_base" value="142.105000655045"/>
+	</isee:controls>
 </xmile>
 
